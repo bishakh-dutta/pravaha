@@ -3,6 +3,8 @@
 
 #include<string>
 #include<vector>
+#include<stack>
+
 using namespace std;
 
 enum TokenType{
@@ -15,23 +17,30 @@ enum TokenType{
     FLOAT,
     BOOL,
     CHAR,
-    STRING
+    STRING,
+    INDENT,
+    DEDENT,
+    NUL
 };
 
 struct Token{
     TokenType type;
     string lexeme;
+    Token(TokenType type,string lexeme):type(type),lexeme(lexeme){}
 };
 
 class Lexer{
     public:
         Lexer(const string& input);
         vector<Token> getTokens();
-        Token peek();
-        Token isSpace();
+        string peek();
+        bool isSpace();
+        bool isNewLine();
+        Token indentSet();
         Token isComment();
     private:
         string input;
         int position;
+        stack<int> indentLevel;
 };
 #endif

@@ -14,7 +14,8 @@ int main(){
     }
     
     Lexer lexer(sourceCode);
-    for(const Token i : lexer.getTokens()){
+    vector tokens = lexer.getTokens();
+    for(const Token i : tokens){
         cout<<i.type<<" "<<i.lexeme<<endl;
     }
 }
