@@ -5,26 +5,33 @@ using namespace std;
 Lexer::Lexer(const string& input) : input(input),position(0){
     indentLevel.push(0);
 }
+void Lexer::addToList(Token token){
+    tokenList.push_back(token);
+}
 string Lexer::peek(){
     return input.substr(position,1);
 }
 bool Lexer::isSpace(){
-    if(!string(" ").compare(peek())){
-        return true;
-    }
-    return false;
+    return peek() == " ";
 }
 bool Lexer::isNewLine(){
-    if(input[position]=='\n'){
-        return true;
+    return input[position] == '\n';
+}
+void Lexer::skipComment() {
+    while (position < input.length() && input[position] != '\n') {
+        position++;
     }
-    return false;
 }
 Token Lexer::indentSet(){
     int i=0;
     while(isSpace()==1){
         position++;
         i++;
+    }
+    //checking if comment exist just after newline
+    if (input.substr(position, 2) == "//"){
+        skipComment();
+        return Token(NUL,"");
     }
     if(indentLevel.top()<i){
         indentLevel.push(i);
@@ -35,22 +42,86 @@ Token Lexer::indentSet(){
     }
     return Token(NUL,"");
 }
+Token Lexer::isString(){
+    position++;
+    int start=position,end=0;
+    while(input[position]!='\"'){
+        end++;
+        position++;
+    }
+    return Token(STRING,input.substr(start,end));
+}
+bool Lexer::isKeyword(string s){
+    return keywords.find(s) != keywords.end();
+}
+bool Lexer::isDecimal(string num){
+     return num.find('.') != string::npos;
+}
+bool Lexer::checkAlpha(){
+    if(isalpha(input[position+1])||isdigit(input[position+1])||input[position+1]=='_'){
+        return true;
+    }
+    return false;
+}
 vector<Token> Lexer::getTokens(){
-    vector<Token> tokenList;
     while(position<input.length()){
-        if(isSpace()==1){
-            position++;
-            continue;
-        }else if(isNewLine()==1){
-            position++;
-            Token indentTok = indentSet();
-            if(indentTok.type!=NUL){
-                tokenList.push_back(indentTok);
+        string current = peek();
+        if(isSpace()||isNewLine()){
+            if (isNewLine()) {
+                position++;
+                Token indentTok = indentSet();
+                if (indentTok.type != NUL) {
+                    addToList(indentTok);
+                }
+            } else {
+                position++;
             }
             continue;
+        }else if (input.substr(position, 2) == "//") {
+            skipComment();
+            continue;
+        }else{
+            if(isalpha(input[position])){
+                //Identifier and Keyword section
+                int start=position,end=1;
+                while(checkAlpha()){
+                    end++;
+                    position++;
+                }
+                string str = input.substr(start,end);
+                if(isKeyword(str)){
+                    addToList(Token(KEYWORD,str));
+                }else{
+                    addToList(Token(IDENTIFIER,str));
+                }
+            }else if(isdigit(input[position])){
+                // Number Section
+                int start=position,end=1;
+                while(isdigit(input[position+1])||input[position+1]=='.'){
+                    end++;
+                    position++;
+                }
+                string num = input.substr(start,end);
+                if(isDecimal(num)){
+                    addToList(Token(FLOAT,num));
+                }else{
+                    addToList(Token(INT,num));
+                }
+            }else{
+                //Operator Section
+                if(current=="="){
+                    addToList(Token(EQUALS,current));
+                }else{
+                    if(current=="\""){
+                        addToList(Token(LITERAL,current));
+                        addToList(isString());
+                        addToList(Token(LITERAL,current));
+                    }else{
+                        addToList(Token(OPERATOR,current));
+                    }
+                }
+            }
         }
-        Token token(KEYWORD,peek());
-        tokenList.push_back(token);
         position++;
     }
     return tokenList;

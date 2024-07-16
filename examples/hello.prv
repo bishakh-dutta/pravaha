@@ -1,6 +1,33 @@
-if (x > 5)
-    print("x is greater than 5")
-    if (y > 10)
-        print("y is greater than 10")
-    print("Done")
-print("End of program")
+// Hello, World! example in Pravaha 
+print("Hello, World!")
+    // Variable declaration 
+int x = 10 
+float y = 3.14 
+// Constant declaration 
+const int MAX_VALUE = 100
+// Function declaration 
+bool check() 
+    return true
+if (x > 5) 
+    print("x is greater than 5") 
+else 
+    print("x is not greater than 5") 
+// Else-if statement 
+if (x > 10)
+    print("x is greater than 10") 
+else if (x > 5) 
+    print("x is greater than 5 but not greater than 10") 
+else 
+    print("x is 5 or less")
+
+// Switch-Case Statement 
+int choice = 2 
+switch (choice) // hello
+    case 1 
+        print("Choice is 1") 
+    break 
+    case 2 
+        print("Choice is 2") 
+    break 
+    default 
+        print("Unknown choice")

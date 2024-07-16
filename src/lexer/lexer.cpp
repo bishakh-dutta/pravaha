@@ -3,6 +3,26 @@
 #include "lexer_logic.h"
 using namespace std;
 string readSourceCode(const string& path);
+
+// just for test section start
+string getTokenTypeName(TokenType type) {
+    switch (type) {
+        case KEYWORD: return "KEYWORD";
+        case IDENTIFIER: return "IDENTIFIER";
+        case OPERATOR: return "OPERATOR";
+        case EQUALS: return "EQUALS";
+        case LITERAL: return "LITERAL";
+        case INT: return "INT";
+        case FLOAT: return "FLOAT";
+        case BOOL: return "BOOL";
+        case STRING: return "STRING";
+        case INDENT: return "INDENT";
+        case DEDENT: return "DEDENT";
+        case NUL: return "NUL";
+        default: return "UNKNOWN";
+    }
+}
+// just for test section end
 int main(){
     string sourceCode;
     try{
@@ -16,7 +36,7 @@ int main(){
     Lexer lexer(sourceCode);
     vector tokens = lexer.getTokens();
     for(const Token i : tokens){
-        cout<<i.type<<" "<<i.lexeme<<endl;
+        cout<<"[  "+getTokenTypeName(i.type)+" : "+i.lexeme+"  ]"<<endl;
     }
 }
 

@@ -4,6 +4,7 @@
 #include<string>
 #include<vector>
 #include<stack>
+#include <unordered_set>
 
 using namespace std;
 
@@ -11,18 +12,23 @@ enum TokenType{
     KEYWORD,
     IDENTIFIER,
     OPERATOR,
-    LITERAL,
     EQUALS,
+    LITERAL,
     INT,
     FLOAT,
     BOOL,
-    CHAR,
     STRING,
     INDENT,
     DEDENT,
     NUL
 };
 
+unordered_set<string> keywords = {
+    "if", "else", "for", "while", "return",
+    "int", "float","string", "bool", "class", "private",
+    "public", "switch", "case", "default", "break",
+    "const","print","true","false"
+};
 struct Token{
     TokenType type;
     string lexeme;
@@ -37,10 +43,17 @@ class Lexer{
         bool isSpace();
         bool isNewLine();
         Token indentSet();
-        Token isComment();
+        bool isKeyword(string s);
+        bool isDecimal(string num);
+        Token isString();
+        bool checkAlpha();
+        void skipComment();
+        void addToList(Token);
     private:
         string input;
         int position;
         stack<int> indentLevel;
+        vector<Token> tokenList;
 };
+
 #endif
