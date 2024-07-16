@@ -2,7 +2,7 @@
 #define LEXER_LOGIC_H
 #include "lexer.h"
 using namespace std;
-Lexer::Lexer(const string& input) : input(input),position(0){
+Lexer::Lexer(const string& input) : input(input),position(0),line(1){
     indentLevel.push(0);
 }
 void Lexer::addToList(Token token){
@@ -31,16 +31,20 @@ Token Lexer::indentSet(){
     //checking if comment exist just after newline
     if (input.substr(position, 2) == "//"){
         skipComment();
-        return Token(NUL,"");
+        return Token(NUL,"",line,position);
+    }
+    // handling useless lines
+    if (input.substr(position, 1) == "\n"){
+        return Token(NUL,"",line,position);
     }
     if(indentLevel.top()<i){
         indentLevel.push(i);
-        return Token(INDENT,"INDENT");
+        return Token(INDENT,"INDENT",line,position);
     }else if(indentLevel.top()>i){
         indentLevel.pop();
-        return Token(DEDENT,"DEDENT");
+        return Token(DEDENT,"DEDENT",line,position);
     }
-    return Token(NUL,"");
+    return Token(NUL,"",line,position);
 }
 Token Lexer::isString(){
     position++;
@@ -49,7 +53,7 @@ Token Lexer::isString(){
         end++;
         position++;
     }
-    return Token(STRING,input.substr(start,end));
+    return Token(STRING,input.substr(start,end),line,position);
 }
 bool Lexer::isKeyword(string s){
     return keywords.find(s) != keywords.end();
@@ -68,6 +72,7 @@ vector<Token> Lexer::getTokens(){
         string current = peek();
         if(isSpace()||isNewLine()){
             if (isNewLine()) {
+                line++;
                 position++;
                 Token indentTok = indentSet();
                 if (indentTok.type != NUL) {
@@ -90,9 +95,9 @@ vector<Token> Lexer::getTokens(){
                 }
                 string str = input.substr(start,end);
                 if(isKeyword(str)){
-                    addToList(Token(KEYWORD,str));
+                    addToList(Token(KEYWORD,str,line,position));
                 }else{
-                    addToList(Token(IDENTIFIER,str));
+                    addToList(Token(IDENTIFIER,str,line,position));
                 }
             }else if(isdigit(input[position])){
                 // Number Section
@@ -103,21 +108,21 @@ vector<Token> Lexer::getTokens(){
                 }
                 string num = input.substr(start,end);
                 if(isDecimal(num)){
-                    addToList(Token(FLOAT,num));
+                    addToList(Token(FLOAT,num,line,position));
                 }else{
-                    addToList(Token(INT,num));
+                    addToList(Token(INT,num,line,position));
                 }
             }else{
                 //Operator Section
                 if(current=="="){
-                    addToList(Token(EQUALS,current));
+                    addToList(Token(EQUALS,current,line,position));
                 }else{
                     if(current=="\""){
-                        addToList(Token(LITERAL,current));
+                        addToList(Token(LITERAL,current,line,position));
                         addToList(isString());
-                        addToList(Token(LITERAL,current));
+                        addToList(Token(LITERAL,current,line,position));
                     }else{
-                        addToList(Token(OPERATOR,current));
+                        addToList(Token(OPERATOR,current,line,position));
                     }
                 }
             }

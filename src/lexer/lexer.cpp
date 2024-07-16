@@ -36,7 +36,7 @@ int main(){
     Lexer lexer(sourceCode);
     vector tokens = lexer.getTokens();
     for(const Token i : tokens){
-        cout<<"[  "+getTokenTypeName(i.type)+" : "+i.lexeme+"  ]"<<endl;
+        cout << "[  " + getTokenTypeName(i.type) + " : " + i.lexeme + "       (Line: " + to_string(i.line) + " Col: " + to_string(i.column) + ") ]" << endl;
     }
 }
 

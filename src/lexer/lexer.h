@@ -32,7 +32,8 @@ unordered_set<string> keywords = {
 struct Token{
     TokenType type;
     string lexeme;
-    Token(TokenType type,string lexeme):type(type),lexeme(lexeme){}
+    int line,column;
+    Token(TokenType type,string lexeme,int line,int column):type(type),lexeme(lexeme),line(line),column(column){}
 };
 
 class Lexer{
@@ -52,6 +53,7 @@ class Lexer{
     private:
         string input;
         int position;
+        int line;
         stack<int> indentLevel;
         vector<Token> tokenList;
 };
