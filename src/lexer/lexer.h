@@ -24,7 +24,7 @@ enum TokenType{
 };
 
 unordered_set<string> keywords = {
-    "if", "else", "for", "while", "return",
+    "if", "else","elif", "for", "while", "return",
     "int", "float","string", "bool", "class", "private",
     "public", "switch", "case", "default", "break",
     "const","print","true","false"
@@ -33,7 +33,8 @@ struct Token{
     TokenType type;
     string lexeme;
     int line,column;
-    Token(TokenType type,string lexeme,int line,int column):type(type),lexeme(lexeme),line(line),column(column){}
+    Token(TokenType type,string lexeme,int line,int column)
+    :type(type),lexeme(lexeme),line(line),column(column-(lexeme.length()-1)){}
 };
 
 class Lexer{
@@ -54,6 +55,7 @@ class Lexer{
         string input;
         int position;
         int line;
+        int col;
         stack<int> indentLevel;
         vector<Token> tokenList;
 };
