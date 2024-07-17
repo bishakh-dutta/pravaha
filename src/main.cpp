@@ -6,7 +6,6 @@ string readSourceCode(const string& path);
 string getTokenTypeName(TokenType type);
 
 int main(int argc, char* argv[]) {
-   //./src/main ./examples/hello.prv
     if (argc != 2) {
         cerr << argv[0] << "Enter file path" << endl;
         return 1;

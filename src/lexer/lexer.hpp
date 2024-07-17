@@ -22,7 +22,6 @@ enum TokenType{
     NUL
 };
 
-
 struct Token{
     TokenType type;
     string lexeme;

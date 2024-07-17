@@ -1,7 +1,11 @@
  
 # Pravaha Programming Language(.prv)
 
-
+### Run
+```bash
+g++ src/main.cpp src/lexer/lexer.cpp -o src/main
+./src/main ./examples/hello.prv
+```
 ## Features
 
 - **Simple Syntax**: Inspired by C-style languages with a focus on readability and clarity.

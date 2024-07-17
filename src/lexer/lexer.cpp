@@ -1,8 +1,5 @@
-#ifndef LEXER_LOGIC_H
-#define LEXER_LOGIC_H
-#include "lexer.hpp"
-#include <unordered_set>
-
+#include "lexer_logic.h"
+#include<unordered_set>
 using namespace std;
 Lexer::Lexer(const string& input) : input(input),position(0),line(1),col(1){
     indentLevel.push(0);
@@ -148,4 +145,3 @@ vector<Token> Lexer::getTokens(){
     }
     return tokenList;
 }
-#endif

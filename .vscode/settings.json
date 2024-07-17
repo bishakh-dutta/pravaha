@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
     "C_Cpp.default.compilerPath": "C:\\msys64\\ucrt64\\bin\\g++.exe",
     "files.associations": {
@@ -7,4 +8,14 @@
         "unordered_set": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
+=======
+{
+    "C_Cpp.default.compilerPath": "C:\\msys64\\ucrt64\\bin\\g++.exe",
+    "files.associations": {
+        "string": "cpp",
+        "*.tcc": "cpp",
+        "iostream": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
+>>>>>>> e44e903b2c44f8908d386eef3cd7e7f4ae8ec296
 }
