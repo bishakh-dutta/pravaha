@@ -15,95 +15,91 @@
     - Represents various types of statements in the language.
     - `Statement -> PrintStmt | VariableDecl | ConstDecl | FunctionDecl | IfStmt | SwitchStmt | ExprStmt`
 
-4. **PrintStmt**
-    - Represents the print statement.
-    - `PrintStmt -> "print" "(" Expr ")" ";"`
-
-5. **VariableDecl**
+4. **VariableDecl**
     - Represents variable declarations.
     - `VariableDecl -> Type Identifier "=" Expr ";"`
 
-6. **ConstDecl**
+5. **ConstDecl**
     - Represents constant declarations.
     - `ConstDecl -> "const" Type Identifier "=" Expr ";"`
 
-7. **FunctionDecl**
+6. **FunctionDecl**
     - Represents function declarations.
     - `FunctionDecl -> Type Identifier "(" ParamList ")" FunctionBody`
     - `FunctionDecl -> Type Identifier "(" ")" FunctionBody`
 
-8. **ParamList**
+7. **ParamList**
     - Represents parameter lists in function declarations.
     - `ParamList -> Parameter ParamList'`
     - `ParamList' -> "," Parameter ParamList' | ε`
 
-9. **Parameter**
+8. **Parameter**
     - Represents parameters in function declarations.
     - `Parameter -> Type Identifier`
 
-10. **FunctionBody**
+9. **FunctionBody**
     - Represents the body of a function.
     - `FunctionBody -> BlockStmt`
 
-11. **BlockStmt**
+10. **BlockStmt**
     - Represents a block of statements.
     - `BlockStmt -> Indent StatementList Dedent`
 
-12. **IfStmt**
+11. **IfStmt**
     - Represents if statements.
     - `IfStmt -> "if" "(" Expr ")" BlockStmt ElseIfList ElsePart`
     - `ElseIfList -> ElseIf ElseIfList | ε`
     - `ElseIf -> "elif" "(" Expr ")" BlockStmt`
     - `ElsePart -> "else" BlockStmt | ε`
 
-13. **SwitchStmt**
+12. **SwitchStmt**
     - Represents switch statements.
     - `SwitchStmt -> "switch" "(" Expr ")" "{" CaseList DefaultPart "}"`
     - `CaseList -> Case CaseList | ε`
     - `Case -> "case" Literal ":" StatementList`
     - `DefaultPart -> "default" ":" StatementList | ε`
 
-14. **ExprStmt**
+13. **ExprStmt**
     - Represents expression statements.
     - `ExprStmt -> Expr ";"`
 
-15. **Expr**
+14. **Expr**
     - Represents expressions.
     - `Expr -> AssignmentExpr`
 
-16. **AssignmentExpr**
+15. **AssignmentExpr**
     - Represents assignment expressions.
     - `AssignmentExpr -> LogicalOrExpr ( "=" AssignmentExpr | ε )`
 
-17. **LogicalOrExpr**
+16. **LogicalOrExpr**
     - Represents logical OR expressions.
     - `LogicalOrExpr -> LogicalAndExpr ("or" LogicalAndExpr)*`
 
-18. **LogicalAndExpr**
+17. **LogicalAndExpr**
     - Represents logical AND expressions.
     - `LogicalAndExpr -> EqualityExpr ("and" EqualityExpr)*`
 
-19. **EqualityExpr**
+18. **EqualityExpr**
     - Represents equality expressions.
     - `EqualityExpr -> RelationalExpr (("==" | "!=") RelationalExpr)*`
 
-20. **RelationalExpr**
+19. **RelationalExpr**
     - Represents relational expressions.
     - `RelationalExpr -> AdditiveExpr ((">" | "<" | ">=" | "<=") AdditiveExpr)*`
 
-21. **AdditiveExpr**
+20. **AdditiveExpr**
     - Represents additive expressions.
     - `AdditiveExpr -> MultiplicativeExpr (("+" | "-") MultiplicativeExpr)*`
 
-22. **MultiplicativeExpr**
+21. **MultiplicativeExpr**
     - Represents multiplicative expressions.
     - `MultiplicativeExpr -> UnaryExpr (("*" | "/") UnaryExpr)*`
 
-23. **UnaryExpr**
+22. **UnaryExpr**
     - Represents unary expressions.
     - `UnaryExpr -> ("+" | "-" | "not") PrimaryExpr`
 
-24. **PrimaryExpr**
+23. **PrimaryExpr**
     - Represents primary expressions.
     - `PrimaryExpr -> Literal | Identifier | "(" Expr ")"`
   

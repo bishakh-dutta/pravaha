@@ -1,6 +1,6 @@
 #include<iostream>
 #include<fstream>
-#include "lexer/lexer.h"
+#include "lexer/lexer.hpp"
 using namespace std;
 string readSourceCode(const string& path);
 
@@ -8,7 +8,6 @@ string readSourceCode(const string& path);
 string getTokenTypeName(TokenType type);
 // just for test section end
 int main(int argc, char* argv[]) {
-   //./src/main ./examples/hello.prv
     if (argc != 2) {
         cerr << argv[0] << "Enter file path" << endl;
         return 1;
