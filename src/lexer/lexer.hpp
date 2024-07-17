@@ -4,7 +4,6 @@
 #include<string>
 #include<vector>
 #include<stack>
-#include <unordered_set>
 
 using namespace std;
 
@@ -23,12 +22,7 @@ enum TokenType{
     NUL
 };
 
-unordered_set<string> keywords = {
-    "if", "else","elif", "for", "while", "return",
-    "int", "float","string", "bool", "class", "private",
-    "public", "switch", "case", "default", "break",
-    "const","print","true","false"
-};
+
 struct Token{
     TokenType type;
     string lexeme;

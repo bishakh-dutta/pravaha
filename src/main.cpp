@@ -1,12 +1,10 @@
 #include<iostream>
 #include<fstream>
-#include "lexer/lexer.h"
+#include "lexer/lexer.hpp"
 using namespace std;
 string readSourceCode(const string& path);
-
-// just for test section start
 string getTokenTypeName(TokenType type);
-// just for test section end
+
 int main(int argc, char* argv[]) {
    //./src/main ./examples/hello.prv
     if (argc != 2) {
@@ -24,9 +22,9 @@ int main(int argc, char* argv[]) {
     
     Lexer lexer(sourceCode);
     vector tokens = lexer.getTokens();
-    for(const Token i : tokens){
-        cout << "[  " + getTokenTypeName(i.type) + " : " + i.lexeme + "       (Line: " + to_string(i.line) + " Col: " + to_string(i.column) + ") ]" << endl;
-    }
+    // for(const Token i : tokens){
+    //     cout << "[  " + getTokenTypeName(i.type) + " : " + i.lexeme + "       (Line: " + to_string(i.line) + " Col: " + to_string(i.column) + ") ]" << endl;
+    // }
 }
 
 string readSourceCode(const string& path){

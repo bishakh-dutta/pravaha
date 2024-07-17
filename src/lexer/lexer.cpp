@@ -1,10 +1,18 @@
 #ifndef LEXER_LOGIC_H
 #define LEXER_LOGIC_H
-#include "lexer_logic.h"
+#include "lexer.hpp"
+#include <unordered_set>
+
 using namespace std;
 Lexer::Lexer(const string& input) : input(input),position(0),line(1),col(1){
     indentLevel.push(0);
 }
+unordered_set<string> keywords = {
+    "if", "else","elif", "for", "while", "return",
+    "int", "float","string", "bool", "class", "private",
+    "public", "switch", "case", "default", "break",
+    "const","print","true","false"
+};
 void Lexer::addToList(Token token){
     tokenList.push_back(token);
 }
