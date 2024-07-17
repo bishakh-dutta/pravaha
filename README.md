@@ -4,7 +4,7 @@
 ### Run
 ```bash
 g++ src/main.cpp src/lexer/lexer.cpp -o src/main
-./src/test-lexer ./examples/hello.prv
+./src/main ./examples/hello.prv
 ```
 ## Features
 
