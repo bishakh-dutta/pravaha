@@ -1,7 +1,7 @@
  
 # Pravaha Programming Language(.prv)
 
-### Run
+### Run Linux
 ```bash
 g++ src/main.cpp src/lexer/lexer.cpp -o src/main
 ./src/main ./examples/hello.prv
