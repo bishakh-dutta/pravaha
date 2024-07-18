@@ -1,11 +1,21 @@
  
 # Pravaha Programming Language(.prv)
 
-### Run Linux
+### Compile & Run Linux
 ```bash
 g++ src/main.cpp src/lexer/lexer.cpp -o src/main
 ./src/main ./examples/hello.prv
 ```
+
+### Compile & Run Windows
+```bash
+clang++ -std=c++17 -target x86_64-pc-windows-gnu src/main.cpp -o src/main.exe
+./src/main.exe ./examples/hello.prv
+
+clang++ -std=c++17 -target x86_64-pc-windows-gnu  src/main.cpp src/lexer/lexer.cpp -I. -o src/pravaha
+./src/pravaha.exe ./examples/hello.prv
+```
+
 ## Features
 
 - **Simple Syntax**: Inspired by C-style languages with a focus on readability and clarity.
