@@ -1,15 +1,9 @@
 #include "lexer.hpp"
-#include<unordered_set>
 using namespace std;
 Lexer::Lexer(const string& input) : input(input),position(0),line(1),col(1){
     indentLevel.push(0);
 }
-unordered_set<string> keywords = {
-    "if", "else","elif", "for", "while", "return",
-    "int", "float","string", "bool", "class", "private",
-    "public", "switch", "case", "default", "break",
-    "const","print","true","false"
-};
+
 void Lexer::addToList(Token token){
     tokenList.push_back(token);
 }
@@ -106,7 +100,11 @@ vector<Token> Lexer::getTokens(){
                 }
                 string str = input.substr(start,end);
                 if(isKeyword(str)){
-                    addToList(Token(KEYWORD,str,line,col));
+                    if(str=="or"||str=="and"||str=="not"||str=="noteq"){
+                        addToList(Token(OPERATOR,str,line,col));
+                    }else{
+                        addToList(Token(KEYWORD,str,line,col));
+                    }
                 }else{
                     addToList(Token(IDENTIFIER,str,line,col));
                 }
@@ -127,7 +125,13 @@ vector<Token> Lexer::getTokens(){
             }else{
                 //Operator Section
                 if(current=="="){
-                    addToList(Token(EQUALS,current,line,col));
+                    if(input[position+1]=='='){
+                        current=input.substr(position,2);
+                        position++;
+                        addToList(Token(OPERATOR,current,line,col));
+                    }else{
+                        addToList(Token(EQUALS,current,line,col));
+                    }
                 }else{
                     if(current=="\""){
                         addToList(Token(LITERAL,current,line,col));
@@ -135,6 +139,10 @@ vector<Token> Lexer::getTokens(){
                         col++;
                         addToList(Token(LITERAL,current,line,col));
                     }else{
+                        if(input[position+1]=='='){
+                            current=input.substr(position,2);
+                            position++;
+                        }
                         addToList(Token(OPERATOR,current,line,col));
                     }
                 }

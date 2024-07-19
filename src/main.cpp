@@ -21,9 +21,9 @@ int main(int argc, char* argv[]) {
     
     Lexer lexer(sourceCode);
     vector tokens = lexer.getTokens();
-    // for(const Token i : tokens){
-    //     cout << "[  " + getTokenTypeName(i.type) + " : " + i.lexeme + "       (Line: " + to_string(i.line) + " Col: " + to_string(i.column) + ") ]" << endl;
-    // }
+    for(const Token i : tokens){
+        cout << "[  " + getTokenTypeName(i.type) + " : " + i.lexeme + "       (Line: " + to_string(i.line) + " Col: " + to_string(i.column) + ") ]" << endl;
+    }
 }
 
 string readSourceCode(const string& path){

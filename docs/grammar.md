@@ -138,4 +138,4 @@
 `if`, `elif`, `else`, `for`, `while`, `switch`, `case`, `default`, `break`, `const`, `print`, `return`, `true`, `false`
 
 ## Operators
-`"+" , "-" , "*" , "/" , "==" , "!=" , ">" , "<" , ">=" , "<=" , "or" , "and" , "not"`
+`"+" , "-" , "*" , "/" , "==" , "noteq" , ">" , "<" , ">=" , "<=" , "or" , "and" , "not"`

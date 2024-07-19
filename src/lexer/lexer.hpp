@@ -4,6 +4,8 @@
 #include<string>
 #include<vector>
 #include<stack>
+#include<unordered_set>
+
 
 using namespace std;
 
@@ -51,6 +53,12 @@ class Lexer{
         int col;
         stack<int> indentLevel;
         vector<Token> tokenList;
+        unordered_set<string> keywords = {
+        "if", "else","elif", "for", "while", "return",
+        "int", "float","string", "bool", "class", "private",
+        "public", "switch", "case", "default", "break",
+        "const","print","true","false","or","and","not","noteq"
+        };
 };
 
 #endif
