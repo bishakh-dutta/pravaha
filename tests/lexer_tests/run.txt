@@ -1,0 +1,7 @@
+write the code in lexer_test.prv
+
+to compile:
+clang++ -std=c++17 -target x86_64-pc-windows-gnu  tests/lexer_tests/lexer_test.cpp src/lexer/lexer.cpp -I. -o tests/lexer_tests/lexer
+
+to run:
+./tests/lexer_tests/lexer.exe ./test/lexer_tests/lexer_test.prv
