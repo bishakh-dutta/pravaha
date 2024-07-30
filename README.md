@@ -3,8 +3,8 @@
 
 ### Compile & Run Linux
 ```bash
-g++ src/main.cpp src/lexer/lexer.cpp -o build/pravaha
-./build/pravaha ./examples/test.prv
+g++ src/main.cpp src/lexer/lexer.cpp -o build/pravahaLin
+./build/pravahaLin ./examples/test.prv
 ```
 
 ### Compile & Run Windows
@@ -12,8 +12,8 @@ g++ src/main.cpp src/lexer/lexer.cpp -o build/pravaha
 clang++ -std=c++17 -target x86_64-pc-windows-gnu src/main.cpp -o src/main.exe
 ./src/main.exe ./examples/test.prv
 
-clang++ -std=c++17 -target x86_64-pc-windows-gnu  src/main.cpp src/lexer/lexer.cpp -I. -o build/pravaha
-./build/pravaha.exe ./examples/test.prv
+clang++ -std=c++17 -target x86_64-pc-windows-gnu  src/main.cpp src/lexer/lexer.cpp -I. -o build/pravahaWin
+./build/pravahaWin.exe ./examples/test.prv
 ```
 
 ## Features
