@@ -12,8 +12,8 @@ g++ src/main.cpp src/lexer/lexer.cpp -o src/main
 clang++ -std=c++17 -target x86_64-pc-windows-gnu src/main.cpp -o src/main.exe
 ./src/main.exe ./examples/hello.prv
 
-clang++ -std=c++17 -target x86_64-pc-windows-gnu  src/main.cpp src/lexer/lexer.cpp -I. -o src/pravaha
-./src/pravaha.exe ./examples/hello.prv
+clang++ -std=c++17 -target x86_64-pc-windows-gnu  src/main.cpp src/lexer/lexer.cpp -I. -o build/pravaha
+./build/pravaha.exe ./examples/test.prv
 ```
 
 ## Features

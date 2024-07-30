@@ -17,11 +17,11 @@
 
 4. **VariableDecl**
     - Represents variable declarations.
-    - `VariableDecl -> Type Identifier "=" Expr ";"`
+    - `VariableDecl -> Type Identifier "=" Expr`
 
 5. **ConstDecl**
     - Represents constant declarations.
-    - `ConstDecl -> "const" Type Identifier "=" Expr ";"`
+    - `ConstDecl -> "const" Type Identifier "=" Expr`
 
 6. **FunctionDecl**
     - Represents function declarations.
@@ -54,14 +54,14 @@
 
 12. **SwitchStmt**
     - Represents switch statements.
-    - `SwitchStmt -> "switch" "(" Expr ")" "{" CaseList DefaultPart "}"`
+    - `SwitchStmt -> "switch" "(" Expr ")" "Indent" CaseList DefaultPart "Dedent"`
     - `CaseList -> Case CaseList | ε`
-    - `Case -> "case" Literal ":" StatementList`
-    - `DefaultPart -> "default" ":" StatementList | ε`
+    - `Case -> "case" Literal StatementList`
+    - `DefaultPart -> "default" StatementList | ε`
 
 13. **ExprStmt**
     - Represents expression statements.
-    - `ExprStmt -> Expr ";"`
+    - `ExprStmt -> Expr`
 
 14. **Expr**
     - Represents expressions.
