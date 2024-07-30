@@ -3,14 +3,14 @@
 
 ### Compile & Run Linux
 ```bash
-g++ src/main.cpp src/lexer/lexer.cpp -o src/main
-./src/main ./examples/hello.prv
+g++ src/main.cpp src/lexer/lexer.cpp -o build/pravaha
+./build/pravaha ./examples/test.prv
 ```
 
 ### Compile & Run Windows
 ```bash
 clang++ -std=c++17 -target x86_64-pc-windows-gnu src/main.cpp -o src/main.exe
-./src/main.exe ./examples/hello.prv
+./src/main.exe ./examples/test.prv
 
 clang++ -std=c++17 -target x86_64-pc-windows-gnu  src/main.cpp src/lexer/lexer.cpp -I. -o build/pravaha
 ./build/pravaha.exe ./examples/test.prv
