@@ -14,7 +14,7 @@ else
 // Else-if statement 
 if (x >= 10)
     print("x is greater than 10") 
-else if (x == 5 and y <= 5) 
+else if (x == 5 and y < 5) 
     print("x is greater than 5 but not greater than 10") 
 else 
     print("x is 5 or less")

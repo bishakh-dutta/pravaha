@@ -12,16 +12,16 @@ class ASTNode{
 
 class ProgramNode : public ASTNode{
     public:
-        ProgramNode(const unique_ptr<ASTNode> StmtList)
+        ProgramNode(const unique_ptr<ASTNode> stmtList)
         :stmltList(stmtList){};
-        unique_ptr<ASTNode> StmtList;
+        unique_ptr<ASTNode> stmtList;
 };
 
 class StmtList : public ASTNode{
     public:
         StmtList(const vector<unique_ptr<ASTNode>> statements)
         :statements(statements){};
-        vector<unique_ptr<ASTNode>> statements
+        vector<unique_ptr<ASTNode>> statements;
 };
 
 class VariableDeclNode : public ASTNode{
@@ -42,9 +42,10 @@ class ConstDeclNode : public ASTNode{
 
 class FunctionDeclNode : public ASTNode{
     public:
-        FunctionDeclNode(const string type, const vector<unique_ptr<ASTNode>> paramList,const vector<unique_ptr<ASTNode>>functionBody)
-        :type(type),paramList(paramList),functionBody(functionBody){};
+        FunctionDeclNode(const string type,const string identifier, const vector<unique_ptr<ASTNode>> paramList,const vector<unique_ptr<ASTNode>>functionBody)
+        :type(type),identifier(identifier),paramList(paramList),functionBody(functionBody){};
         string type;
+        string identifier;
         vector<unique_ptr<ASTNode>> paramList;
         vector<unique_ptr<ASTNode>> functionBody;
 };
@@ -80,9 +81,18 @@ class elseStmtNode : public ASTNode{
         vector<unique_ptr<ASTNode>> elseblock;
 };
 
-class ExprNodeList : public ASTNode{
+class ConditionNode : public ASTNode{
     public:
-        ExprNodeList(const vector<unique_ptr<ASTNode>> exprList)
+        ConditionNode(const unique_ptr<ASTNode> ifBlock,const vector<unique_ptr<ASTNode>> elsIfBlockList,const unique_ptr<ASTNode> elseBlock)
+        :ifBlock(ifBlock),elsIfBlockList(elsIfBlockList),elseBlock(elseBlock){};
+        unique_ptr<ASTNode> ifBlock;
+        vector<unique_ptr<ASTNode>> elsIfBlockList;
+        unique_ptr<ASTNode> elseBlock;
+};
+
+class ExprListNode : public ASTNode{
+    public:
+        ExprListNode(const vector<unique_ptr<ASTNode>> exprList)
         :exprList(exprList){};
         vector<unique_ptr<ASTNode>> exprList;
 };
