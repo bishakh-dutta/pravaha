@@ -10,40 +10,54 @@ class ASTNode{
         virtual ~ASTNode() = default;
 };
 
+class TestNode : public ASTNode{
+    public:
+        TestNode(){};
+};
+
 class ProgramNode : public ASTNode{
     public:
-        ProgramNode(const unique_ptr<ASTNode> stmtList)
-        :stmltList(stmtList){};
+        ProgramNode(unique_ptr<ASTNode> stmtList)
+        :stmtList(std::move(stmtList)){};
+    private:
         unique_ptr<ASTNode> stmtList;
 };
 
 class StmtList : public ASTNode{
     public:
-        StmtList(const vector<unique_ptr<ASTNode>> statements)
-        :statements(statements){};
+        StmtList(vector<unique_ptr<ASTNode>> statements)
+        :statements(std::move(statements)){};
         vector<unique_ptr<ASTNode>> statements;
 };
 
 class VariableDeclNode : public ASTNode{
     public:
-        VariableDeclNode(const string type,const string indentifier,const unique_ptr<ASTNode> expr)
-        :type(type),indentifier(indentifier),expr(expr){};
+        VariableDeclNode(const string type,const string indentifier,unique_ptr<ASTNode> expr)
+        :type(type),indentifier(indentifier),expr(std::move(expr)){};
+        VariableDeclNode(const string type,const string indentifier)
+        :type(type),indentifier(indentifier){};
+        string getIdentifier(){
+            return this->indentifier;
+        };
+    private:
         string type,indentifier;
         unique_ptr<ASTNode> expr;
 };
 
 class ConstDeclNode : public ASTNode{
     public:
-        ConstDeclNode(const unique_ptr<ASTNode> declNode)
-        :declNode(declNode){};
+        ConstDeclNode(unique_ptr<ASTNode> declNode)
+        :declNode(std::move(declNode)){};
+    private:
         string type = "const";
         unique_ptr<ASTNode> declNode;
 };
 
 class FunctionDeclNode : public ASTNode{
     public:
-        FunctionDeclNode(const string type,const string identifier, const vector<unique_ptr<ASTNode>> paramList,const vector<unique_ptr<ASTNode>>functionBody)
-        :type(type),identifier(identifier),paramList(paramList),functionBody(functionBody){};
+        FunctionDeclNode(const string type,const string identifier,vector<unique_ptr<ASTNode>> paramList,vector<unique_ptr<ASTNode>>functionBody)
+        :type(type),identifier(identifier),paramList(std::move(paramList)),functionBody(std::move(functionBody)){};
+    private:
         string type;
         string identifier;
         vector<unique_ptr<ASTNode>> paramList;
@@ -52,39 +66,44 @@ class FunctionDeclNode : public ASTNode{
 
 class FunctionCallNode : public ASTNode{
     public:
-        FunctionCallNode(const string identifier,const vector<unique_ptr<ASTNode>> argList)
-        :identifier(identifier),argList(argList){};
+        FunctionCallNode(const string identifier,vector<unique_ptr<ASTNode>> argList)
+        :identifier(identifier),argList(std::move(argList)){};
+    private:
         string identifier;
         vector<unique_ptr<ASTNode>> argList;
 };
 
 class IfStmtNode : public ASTNode{
     public:
-        IfStmtNode(const vector<unique_ptr<ASTNode>> expr,const vector<unique_ptr<ASTNode>> ifblock)
-        :expr(expr),ifblock(ifblock){};
+        IfStmtNode(vector<unique_ptr<ASTNode>> expr,vector<unique_ptr<ASTNode>> ifblock)
+        :expr(std::move(expr)),ifblock(std::move(ifblock)){};
+    private:
         vector<unique_ptr<ASTNode>> expr;
         vector<unique_ptr<ASTNode>> ifblock;
 };
 
 class ElsIfStmtNode : public ASTNode{
     public:
-        ElsIfStmtNode(const vector<unique_ptr<ASTNode>> expr,const vector<unique_ptr<ASTNode>> elsifblock)
-        :expr(expr),elsifblock(elsifblock){};
+        ElsIfStmtNode(vector<unique_ptr<ASTNode>> expr,vector<unique_ptr<ASTNode>> elsifblock)
+        :expr(std::move(expr)),elsifblock(std::move(elsifblock)){};
+    private:
         vector<unique_ptr<ASTNode>> expr;
         vector<unique_ptr<ASTNode>> elsifblock;
 };
 
 class elseStmtNode : public ASTNode{
     public:
-        elseStmtNode(const vector<unique_ptr<ASTNode>> elseblock)
-        :elseblock(elseblock){};
+        elseStmtNode(vector<unique_ptr<ASTNode>> elseblock)
+        :elseblock(std::move(elseblock)){};
+    private:
         vector<unique_ptr<ASTNode>> elseblock;
 };
 
 class ConditionNode : public ASTNode{
     public:
-        ConditionNode(const unique_ptr<ASTNode> ifBlock,const vector<unique_ptr<ASTNode>> elsIfBlockList,const unique_ptr<ASTNode> elseBlock)
-        :ifBlock(ifBlock),elsIfBlockList(elsIfBlockList),elseBlock(elseBlock){};
+        ConditionNode(unique_ptr<ASTNode> ifBlock,vector<unique_ptr<ASTNode>> elsIfBlockList,unique_ptr<ASTNode> elseBlock)
+        :ifBlock(std::move(ifBlock)),elsIfBlockList(std::move(elsIfBlockList)),elseBlock(std::move(elseBlock)){};
+    private:
         unique_ptr<ASTNode> ifBlock;
         vector<unique_ptr<ASTNode>> elsIfBlockList;
         unique_ptr<ASTNode> elseBlock;
@@ -92,26 +111,28 @@ class ConditionNode : public ASTNode{
 
 class ExprListNode : public ASTNode{
     public:
-        ExprListNode(const vector<unique_ptr<ASTNode>> exprList)
-        :exprList(exprList){};
+        ExprListNode(vector<unique_ptr<ASTNode>> exprList)
+        :exprList(std::move(exprList)){};
         vector<unique_ptr<ASTNode>> exprList;
 };
 
 class ExprNode : public ASTNode{
     public:
-        ExprNode(const string type,const unique_ptr<ASTNode> left, const unique_ptr<ASTNode> right)
-        :type(type),left(left),right(right){};
+        ExprNode(const string type,unique_ptr<ASTNode> left,unique_ptr<ASTNode> right)
+        :type(type),left(std::move(left)),right(std::move(right)){};
+    private:
         string type;
         unique_ptr<ASTNode> left;
         unique_ptr<ASTNode> right;
 };
 
-class Literal : public ASTNode{
-    public:
-        Literal(const string type,const auto value)
-        :type(type),value(value){};
-        string type;
-        auto value;
-};
+// class Literal : public ASTNode{
+//     public:
+//         Literal(const string type,const auto value)
+//         :type(type),value(value){};
+//     private:
+//         string type;
+//         auto value;
+// };
 
 #endif

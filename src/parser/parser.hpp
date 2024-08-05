@@ -5,15 +5,12 @@
 #include <memory>
 #include<unordered_set>
 
-enum ErrorTypes{
-    MSG = "Error at",
-};
 
 class Parser{
     public:
         Parser(TokenStream& tokenStream);
 
-        string ErrMsg(ErrorTypes err,int line,int col);
+        //string ErrMsg(ErrorTypes err,int line,int col);
         unique_ptr<ASTNode> parseProgram();
 
     private:

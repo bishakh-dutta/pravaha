@@ -2,7 +2,7 @@
 #include "tokenstream.hpp"
 using namespace std;
 
-const Token NUL(TokenType::NUL,"",0,0);
+const Token NULT(TokenType::NUL,"",0,0);
 TokenStream::TokenStream(const vector<Token>& tokens)
 :tokens(tokens),position(0){};
 
@@ -12,44 +12,42 @@ bool TokenStream::isAtEnd(){
 
 Token TokenStream::next(){
     if(!isAtEnd()){
-        position++;
-        return tokens.at(position);
+        return tokens[position++];
     }
-    return NUL;
+    return NULT;
 }
 
 Token TokenStream::peekNext(){
     if(!isAtEnd()){
-        return tokens.at(position+1);
+        return tokens[position+1];
     }
-    return NUL;
+    return NULT;
 }
 
 Token TokenStream::peek(){
-    return tokens.at(position);
+    return tokens[position];
 }
 
 Token TokenStream::peekAhead(int steps){
     if(!isAtEnd()){
-        return tokens.at(position+steps);
+        return tokens[position+steps];
     }
-    return NUL;
+    return NULT;
 }
 
 void TokenStream::consume(){
-    if !isAtEnd() position++;
+    if (!isAtEnd()) position++;
 }
 
 bool TokenStream::match(TokenType expectedType){
-    if(tokens.at(position).type==expectedType){
+    if(tokens[position].type==expectedType){
         return true;
     }
     return false;
 }
 
 bool TokenStream::expect(TokenType expectedType){
-    consume();
-    if(tokens.at(position).type==expectedType){
+    if(tokens[position].type==expectedType){
         return true;
     }
     return false;

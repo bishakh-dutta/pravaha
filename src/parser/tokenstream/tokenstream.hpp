@@ -1,6 +1,6 @@
 #ifndef TOKENSTREAM_H
 #define TOKENSTREAM_H
-#include "../lexer/lexer.hpp"
+#include "../../lexer/lexer.hpp"
 #include<vector>
 using namespace std;
 class TokenStream{
@@ -15,9 +15,9 @@ class TokenStream{
         void consume();
         bool match(TokenType expectedType);
         bool expect(TokenType expectedType);
+        int position;
     private:
      vector<Token> tokens;
-     int position;
 };
 
 #endif
