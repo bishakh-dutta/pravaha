@@ -3,11 +3,13 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include<iostream>
 using namespace std;
 
 class ASTNode{
     public:
         virtual ~ASTNode() = default;
+        virtual void print() const = 0;
 };
 
 class TestNode : public ASTNode{
@@ -28,19 +30,67 @@ class StmtList : public ASTNode{
         StmtList(vector<unique_ptr<ASTNode>> statements)
         :statements(std::move(statements)){};
         vector<unique_ptr<ASTNode>> statements;
+        void print() const override{
+            for (const auto& stmt : statements) {
+                cout<<endl;
+                if (stmt) stmt->print();
+            }
+        };
+};
+
+class ExprNode : public ASTNode{
+    public:
+        ExprNode(const string type,unique_ptr<ASTNode> left,unique_ptr<ASTNode> right)
+        :type(type),left(std::move(left)),right(std::move(right)){};
+        // string getType(){
+        //     return type;
+        // };
+        // unique_ptr<ASTNode> getLeft(){
+        //     return std::move(left);
+        // };
+        // unique_ptr<ASTNode> getRight(){
+        //     return std::move(right);
+        // };
+        void print() const override {
+            std::cout << "ExprNode {\n";
+            std::cout << "op: '" << type << "',\n";
+            std::cout << "left: ";
+            if (left) left->print();
+            std::cout << "right: ";
+            if (right) right->print();
+            std::cout << "}\n";
+        }
+    private:
+        string type;
+        unique_ptr<ASTNode> left;
+        unique_ptr<ASTNode> right;
 };
 
 class VariableDeclNode : public ASTNode{
     public:
-        VariableDeclNode(const string type,const string indentifier,unique_ptr<ASTNode> expr)
-        :type(type),indentifier(indentifier),expr(std::move(expr)){};
-        VariableDeclNode(const string type,const string indentifier)
-        :type(type),indentifier(indentifier){};
-        string getIdentifier(){
-            return this->indentifier;
-        };
+        VariableDeclNode(const string type,const string identifier,unique_ptr<ASTNode> expr)
+        :type(type),identifier(identifier),expr(std::move(expr)){};
+        VariableDeclNode(const string type,const string identifier)
+        :type(type),identifier(identifier){};
+        // string getType(){
+        //     return this->type;
+        // };
+        // string getIdentifier(){
+        //     return this->indentifier;
+        // };
+        // unique_ptr<ASTNode> getExpr(){
+        //     return std::move(expr);
+        // };
+        void print() const override {
+            std::cout << "VariableDeclNode {\n";
+            std::cout << "type: \"" << type << "\",\n";
+            std::cout << "identifier: \"" << identifier << "\",\n";
+            std::cout << "expr: ";
+            if (expr) expr->print();
+            std::cout << "}\n";
+        }
     private:
-        string type,indentifier;
+        string type,identifier;
         unique_ptr<ASTNode> expr;
 };
 
@@ -75,19 +125,19 @@ class FunctionCallNode : public ASTNode{
 
 class IfStmtNode : public ASTNode{
     public:
-        IfStmtNode(vector<unique_ptr<ASTNode>> expr,vector<unique_ptr<ASTNode>> ifblock)
+        IfStmtNode(unique_ptr<ASTNode> expr,vector<unique_ptr<ASTNode>> ifblock)
         :expr(std::move(expr)),ifblock(std::move(ifblock)){};
     private:
-        vector<unique_ptr<ASTNode>> expr;
+        unique_ptr<ASTNode> expr;
         vector<unique_ptr<ASTNode>> ifblock;
 };
 
 class ElsIfStmtNode : public ASTNode{
     public:
-        ElsIfStmtNode(vector<unique_ptr<ASTNode>> expr,vector<unique_ptr<ASTNode>> elsifblock)
+        ElsIfStmtNode(unique_ptr<ASTNode> expr,vector<unique_ptr<ASTNode>> elsifblock)
         :expr(std::move(expr)),elsifblock(std::move(elsifblock)){};
     private:
-        vector<unique_ptr<ASTNode>> expr;
+        unique_ptr<ASTNode> expr;
         vector<unique_ptr<ASTNode>> elsifblock;
 };
 
@@ -109,30 +159,30 @@ class ConditionNode : public ASTNode{
         unique_ptr<ASTNode> elseBlock;
 };
 
-class ExprListNode : public ASTNode{
-    public:
-        ExprListNode(vector<unique_ptr<ASTNode>> exprList)
-        :exprList(std::move(exprList)){};
-        vector<unique_ptr<ASTNode>> exprList;
-};
-
-class ExprNode : public ASTNode{
-    public:
-        ExprNode(const string type,unique_ptr<ASTNode> left,unique_ptr<ASTNode> right)
-        :type(type),left(std::move(left)),right(std::move(right)){};
-    private:
-        string type;
-        unique_ptr<ASTNode> left;
-        unique_ptr<ASTNode> right;
-};
-
-// class Literal : public ASTNode{
+// class ExprListNode : public ASTNode{
 //     public:
-//         Literal(const string type,const auto value)
-//         :type(type),value(value){};
-//     private:
-//         string type;
-//         auto value;
+//         ExprListNode(vector<unique_ptr<ASTNode>> exprList)
+//         :exprList(std::move(exprList)){};
+//         vector<unique_ptr<ASTNode>> exprList;
 // };
+
+
+
+class Literal : public ASTNode{
+    public:
+        Literal(TokenType type,string value)
+        :type(type),value(value){};
+        // string print(){
+        //      return value;
+        // }
+        void print() const override {
+            std::cout << "Literal {\n";
+            std::cout << "value: \"" << value << "\"\n";
+            std::cout << "}\n";
+        }
+    private:
+        TokenType type;
+        string value;
+};
 
 #endif

@@ -25,11 +25,14 @@ Token TokenStream::peekNext(){
 }
 
 Token TokenStream::peek(){
-    return tokens[position];
+    if(!isAtEnd()){
+        return tokens[position];
+    }
+    return NULT;
 }
 
 Token TokenStream::peekAhead(int steps){
-    if(!isAtEnd()){
+    if(!isAtEnd()&&(position+steps)>tokens.size()){
         return tokens[position+steps];
     }
     return NULT;
@@ -47,6 +50,7 @@ bool TokenStream::match(TokenType expectedType){
 }
 
 bool TokenStream::expect(TokenType expectedType){
+    position++;
     if(tokens[position].type==expectedType){
         return true;
     }

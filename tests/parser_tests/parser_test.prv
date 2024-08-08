@@ -1,1 +1,5 @@
-int x
+int x = 4 + 2 * 3 - 5
+int y = x + 20
+int z = x + y / 2 - 1
+float pi = 3.14
+int test = 4 + 2 * 10 + 3 * 5 / 2 - 1

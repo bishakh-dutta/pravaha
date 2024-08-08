@@ -22,14 +22,15 @@ int main(){
     unique_ptr<ASTNode> ast = Parser.parseProgram();
 
     auto stmtListNode = dynamic_cast<StmtList*>(ast.get());
-    if (stmtListNode) {
-        for (const auto& stmt : stmtListNode->statements) {
-            auto varDeclNode = dynamic_cast<VariableDeclNode*>(stmt.get());
-            if (varDeclNode) {
-                cout << "Identifier: " << varDeclNode->getIdentifier() << endl;
-            }
-        }
-    }
+    // if (stmtListNode) {
+    //     for (const auto& stmt : stmtListNode->statements) {
+    //         auto varDeclNode = dynamic_cast<VariableDeclNode*>(stmt.get());
+    //         if (varDeclNode) {
+    //             varDeclNode->print();
+    //         }
+    //     }
+    // }
+    stmtListNode->print();
 }
 string readSourceCode(const string& path){
     ifstream sourceCode(path);

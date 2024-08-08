@@ -3,6 +3,7 @@
 #include "tokenstream/tokenstream.hpp"
 #include "ast.hpp"
 #include <memory>
+#include<stack>
 #include<unordered_set>
 
 
@@ -32,6 +33,8 @@ class Parser{
         unordered_set<string> dataType = {
             "int","float","string","bool"
         };
+        stack<string> exprOp;
+        stack<unique_ptr<ASTNode>> exprTree;
 };
 
 #endif

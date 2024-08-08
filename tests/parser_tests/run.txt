@@ -5,3 +5,79 @@ clang++ -std=c++17 -target x86_64-pc-windows-gnu  tests/parser_tests/parser_test
 
 to run:
 ./tests/parser_tests/parser.exe ./test/parser_tests/parser_test.prv
+
+
+Example Input 1: int x = 4 + 2 * 3 - 5
+Output:
+VariableDeclNode {
+	type: "int",
+	identifier: "x",
+	expr: ExprNode {
+		op: '+',
+		left: Literal {
+			value: "4"
+		}
+		right: ExprNode {
+			op: '-',
+			left: ExprNode {
+				op: '*',
+				left: Literal {
+					value: "2"
+				}
+				right: Literal {
+					value: "3"
+				}
+			}
+			right: Literal {
+				value: "5"
+			}
+		}
+	}
+}
+
+
+Example Input 2: int test = 4 + 2 * 10 + 3 * 5 / 2 - 1
+Output:
+VariableDeclNode {
+    type: "int",
+    identifier: "test",
+    expr: ExprNode {
+        op: '+',
+        left: Literal {
+            value: "4"
+        }
+        right: ExprNode {
+            op: '+',
+            left: ExprNode {
+                op: '*',
+                left: Literal {
+                    value: "2"
+                }
+                right: Literal {
+                    value: "10"
+                }
+            }
+            right: ExprNode {
+                op: '-',
+                left: ExprNode {
+                    op: '/',
+                    left: ExprNode {
+                        op: '*',
+                        left: Literal {
+                            value: "3"
+                        }
+                        right: Literal {
+                            value: "5"
+                        }
+                    }
+                    right: Literal {
+                        value: "2"
+                    }
+                }
+                right: Literal {
+                    value: "1"
+                }
+            }
+        }
+    }
+}
