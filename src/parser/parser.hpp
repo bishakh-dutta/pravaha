@@ -26,7 +26,7 @@ class Parser{
         unique_ptr<ASTNode> parseElsIfStmt();
         unique_ptr<ASTNode> parseElsStmt();
         unique_ptr<ASTNode> parseCndStmt();
-        unique_ptr<ASTNode> parseExprList();
+        unique_ptr<ASTNode> parseBinaryOp();
         unique_ptr<ASTNode> parseExpr();
         unique_ptr<ASTNode> parseLiteral();
         unique_ptr<ASTNode> parseParams();

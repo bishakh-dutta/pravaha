@@ -17,6 +17,17 @@ unique_ptr<ASTNode> Parser::parseStmtList(){
     return make_unique<StmtList>(std::move(stmtList));
 }
 
+unique_ptr<ASTNode> Parser::parseBinaryOp(){
+    if(!tokenStream.match(IDENTIFIER)){
+        // throw error
+    }
+    Token identifer = tokenStream.next();
+    unique_ptr<ASTNode> left = make_unique<Literal>(identifer.type,identifer.lexeme);
+    string op = tokenStream.next().lexeme;
+    unique_ptr<ASTNode> right = parseExpr();
+    return make_unique<ExprNode>(op,std::move(left),std::move(right));
+}
+
 unique_ptr<ASTNode> Parser::parseStmt(){
     Token current = tokenStream.peek();
     if(dataType.find(current.lexeme) != dataType.end()){
@@ -32,11 +43,12 @@ unique_ptr<ASTNode> Parser::parseStmt(){
             return parseVarDecl();
         }
     }else if(current.type==IDENTIFIER){
-        Token next = tokenStream.peekAhead(2);
+        unordered_set<string> binaryOp = {"=","+=","-=","*=","/=","==","<","<=",">",">=","and","or"};
+        Token next = tokenStream.peekNext();
         if(next.lexeme=="("){
             return parseFncCall();
-        }else if(next.lexeme=="="){
-            return parseExpr();
+        }else if(binaryOp.find(next.lexeme) != binaryOp.end()){
+            return parseBinaryOp();
         }
         //throw error
     }else if(current.lexeme=="const"){
