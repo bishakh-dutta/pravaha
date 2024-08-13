@@ -1,4 +1,5 @@
 #include<string>
+#include<iostream>
 #include "tokenstream.hpp"
 using namespace std;
 
@@ -32,7 +33,7 @@ Token TokenStream::peek(){
 }
 
 Token TokenStream::peekAhead(int steps){
-    if(!isAtEnd()&&(position+steps)>tokens.size()){
+    if(!isAtEnd()&&(position+steps)<tokens.size()){
         return tokens[position+steps];
     }
     return NULT;

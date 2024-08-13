@@ -78,8 +78,47 @@ unique_ptr<ASTNode> Parser::parseVarDecl(){
 unique_ptr<ASTNode> Parser::parseConstDecl(){
 return nullptr;
 }
+vector<unique_ptr<ASTNode>> Parser::parseBlock(){
+    vector<unique_ptr<ASTNode>> block;
+    int level = 0;
+    while(!tokenStream.isAtEnd()){
+        if(tokenStream.peek().lexeme=="INDENT"){
+            level++;
+            tokenStream.consume();
+        }
+        if(tokenStream.peek().lexeme=="DEDENT"){
+            level--;
+            tokenStream.consume();
+            if(level==0) break;
+        }
+        block.push_back(parseStmt());
+    }
+    return block;
+}
 unique_ptr<ASTNode> Parser::parseFncDecl(){
-return nullptr;
+
+    string type = tokenStream.next().lexeme;
+    int paramFlag = 0;
+    if(!tokenStream.match(IDENTIFIER)){
+        // throw err
+    }
+    string identifier = tokenStream.next().lexeme;
+    tokenStream.consume();
+    vector<unique_ptr<ASTNode>> paramList;
+    vector<unique_ptr<ASTNode>> fnBlock;
+    Token current = tokenStream.peek();
+    if(dataType.find(current.lexeme) != dataType.end()){
+        paramFlag=1;
+        // paramList = parseParams();
+    }
+    if(tokenStream.peek().lexeme==")"){
+        tokenStream.consume();
+        fnBlock = parseBlock();
+    }else{
+        // throw err
+    }
+    if(paramFlag==1) return make_unique<FunctionDeclNode>(type,identifier,std::move(paramList),std::move(fnBlock));
+    return make_unique<FunctionDeclNode>(type,identifier,std::move(fnBlock));
 }
 unique_ptr<ASTNode> Parser::parseFncCall(){
 return nullptr;

@@ -5,3 +5,7 @@ float pi = 3.14
 int test = 4 + 2 * 10 + 3 * 5 / 2 - 1
 a = 21
 x+=5
+int z
+int fn()
+    int x=0
+int z

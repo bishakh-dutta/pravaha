@@ -32,3 +32,5 @@ switch (choice) // hello
         print("Unknown choice")
 print("End of program")
 choice -= 1
+int fn()
+    int x=0

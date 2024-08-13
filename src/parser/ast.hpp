@@ -107,6 +107,18 @@ class FunctionDeclNode : public ASTNode{
     public:
         FunctionDeclNode(const string type,const string identifier,vector<unique_ptr<ASTNode>> paramList,vector<unique_ptr<ASTNode>>functionBody)
         :type(type),identifier(identifier),paramList(std::move(paramList)),functionBody(std::move(functionBody)){};
+        FunctionDeclNode(const string type,const string identifier,vector<unique_ptr<ASTNode>>functionBody)
+        :type(type),identifier(identifier),functionBody(std::move(functionBody)){};
+        void print() const override{
+            cout << "FunctionDeclNode {\n";
+            cout << "type: \"" << type << "\",\n";
+            cout << "identifier: \"" << identifier << "\",\n";
+            cout << "FunctionBody: ";
+            for(const auto& stmt : functionBody){
+                stmt->print();
+            }
+            cout << "}\n";
+        };
     private:
         string type;
         string identifier;
