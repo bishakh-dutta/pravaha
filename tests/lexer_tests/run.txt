@@ -1,7 +1,12 @@
 write the code in lexer_test.prv
+to compile linux:
+g++ tests/lexer_tests/lexer_test.cpp src/lexer/lexer.cpp -I. -o tests/lexer_tests/lexer
 
-to compile:
+to compile windows:
 clang++ -std=c++17 -target x86_64-pc-windows-gnu  tests/lexer_tests/lexer_test.cpp src/lexer/lexer.cpp -I. -o tests/lexer_tests/lexer
 
-to run:
+to run linux:
+./tests/lexer_tests/lexer ./test/lexer_tests/lexer_test.prv
+
+to run windows:
 ./tests/lexer_tests/lexer.exe ./test/lexer_tests/lexer_test.prv

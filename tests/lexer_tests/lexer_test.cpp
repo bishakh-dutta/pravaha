@@ -6,8 +6,8 @@ string readSourceCode(const string& path);
 string getTokenTypeName(TokenType type);
 void printCode(vector<Token> tokens);
 int main(){
-    //string filePath = "./tests/lexer_tests/lexer_test.prv";
-    string filePath = "./tests/parser_tests/parser_test.prv";
+    string filePath = "./tests/lexer_tests/lexer_test.prv";
+    // string filePath = "./tests/parser_tests/parser_test.prv";
     string sourceCode;
     try {
         sourceCode = readSourceCode(filePath);
