@@ -103,6 +103,20 @@ class ConstDeclNode : public ASTNode{
         unique_ptr<ASTNode> declNode;
 };
 
+class ParamNode : public ASTNode{
+    public:
+        ParamNode(const string type,const string identifier)
+        :type(type),identifier(identifier){};
+        void print() const override{
+            cout<<"Params: {\n";
+            cout<<"type: "<<type<<"\n";
+            cout<<"identifier: "<<identifier<<"\n";
+            cout<<"}\n";
+        };
+    private:
+        string type;
+        string identifier;
+};
 class FunctionDeclNode : public ASTNode{
     public:
         FunctionDeclNode(const string type,const string identifier,vector<unique_ptr<ASTNode>> paramList,vector<unique_ptr<ASTNode>>functionBody)
@@ -113,10 +127,20 @@ class FunctionDeclNode : public ASTNode{
             cout << "FunctionDeclNode {\n";
             cout << "type: \"" << type << "\",\n";
             cout << "identifier: \"" << identifier << "\",\n";
-            cout << "FunctionBody: ";
-            for(const auto& stmt : functionBody){
-                stmt->print();
+            if(paramList.size()!=0){
+                cout<<"ParamList: {\n";
+                for(const auto& param:paramList){
+                    param->print();
+                }
+                cout<<"}\n";
             }
+            cout << "FunctionBody: {";
+            if(functionBody.size()!=0){
+                for(const auto& stmt : functionBody){
+                    stmt->print();
+                }
+            }
+            cout<<"}\n";
             cout << "}\n";
         };
     private:

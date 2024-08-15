@@ -109,7 +109,7 @@ unique_ptr<ASTNode> Parser::parseFncDecl(){
     Token current = tokenStream.peek();
     if(dataType.find(current.lexeme) != dataType.end()){
         paramFlag=1;
-        // paramList = parseParams();
+        paramList = parseParams();
     }
     if(tokenStream.peek().lexeme==")"){
         tokenStream.consume();
@@ -226,6 +226,25 @@ unique_ptr<ASTNode> Parser::parseExpr(){
 unique_ptr<ASTNode> Parser::parseLiteral(){
 return nullptr;
 }
-unique_ptr<ASTNode> Parser::parseParams(){
-    return nullptr;
+vector<unique_ptr<ASTNode>> Parser::parseParams(){
+    vector<unique_ptr<ASTNode>> paramList;
+    while(!tokenStream.isAtEnd()){
+        Token current = tokenStream.peek();
+        if(!(dataType.find(current.lexeme) != dataType.end())){
+            // throw error
+        }
+        string type = tokenStream.next().lexeme;
+        if(tokenStream.match(IDENTIFIER)){
+            // throw error
+        }
+        string identifier = tokenStream.next().lexeme;
+        if(tokenStream.peek().lexeme==","){
+            tokenStream.consume();
+        }
+        paramList.push_back(make_unique<ParamNode>(type,identifier));
+        if(tokenStream.peek().lexeme==")"){
+            break;
+        }
+    }
+    return paramList;
 }

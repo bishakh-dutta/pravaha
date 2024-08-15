@@ -29,7 +29,7 @@ class Parser{
         unique_ptr<ASTNode> parseBinaryOp();
         unique_ptr<ASTNode> parseExpr();
         unique_ptr<ASTNode> parseLiteral();
-        unique_ptr<ASTNode> parseParams();
+        vector<unique_ptr<ASTNode>> parseParams();
         vector<unique_ptr<ASTNode>> parseBlock();
         unordered_set<string> dataType = {
             "int","float","string","bool"

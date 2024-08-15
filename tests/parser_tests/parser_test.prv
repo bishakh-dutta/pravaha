@@ -9,3 +9,5 @@ int z
 int fn()
     int x=0
 int z
+int fn(int x,int z)
+    int b = 1
