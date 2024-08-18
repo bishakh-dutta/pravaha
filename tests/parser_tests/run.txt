@@ -4,7 +4,7 @@ to compile:
 clang++ -std=c++17 -target x86_64-pc-windows-gnu  tests/parser_tests/parser_test.cpp src/lexer/lexer.cpp src/parser/tokenstream/tokenstream.cpp src/parser/parser.cpp -I. -o tests/parser_tests/parser
 
 to run:
-./tests/parser_tests/parser.exe ./test/parser_tests/parser_test.prv
+./tests/parser_tests/parser.exe ./tests/parser_tests/parser_test.prv
 
 
 Example Input 1: int x = 4 + 2 * 3 - 5

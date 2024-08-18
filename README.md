@@ -1,6 +1,8 @@
  
 # Pravaha Programming Language(.prv)
 
+![Icon](https://github.com/bishakh-dutta/pravaha/raw/main/pravaha.png)
+
 ### Compile & Run Linux
 ```bash
 g++ src/main.cpp src/lexer/lexer.cpp -o build/pravahaLin

@@ -6,10 +6,14 @@
 #include "src/parser/ast.hpp"
 using namespace std;
 string readSourceCode(const string& path);
-int main(){
-    string filePath = "./tests/parser_tests/parser_test.prv";
+int main(int argc, char* argv[]) {
+    if (argc != 2) {
+        cerr << argv[0] << "Enter file path" << endl;
+        return 1;
+    }
     string sourceCode;
     try {
+        string filePath = argv[1];
         sourceCode = readSourceCode(filePath);
     }
     catch(const exception& e){
