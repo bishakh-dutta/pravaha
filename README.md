@@ -1,7 +1,6 @@
  
 # Pravaha Programming Language(.prv)
-
-![Icon](https://github.com/bishakh-dutta/pravaha/raw/main/pravaha.png)
+<img src="https://github.com/bishakh-dutta/pravaha/raw/main/pravaha.png" alt="Pravaha Icon" width="100" height="100">
 
 ### Compile & Run Linux
 ```bash
