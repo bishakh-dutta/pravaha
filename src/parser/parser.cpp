@@ -1,4 +1,5 @@
 #include "parser.hpp"
+#include "../../utils/errorhandler/parserError.hpp"
 using namespace std;
 
 Parser::Parser(TokenStream& tokenStream)
@@ -18,8 +19,11 @@ unique_ptr<ASTNode> Parser::parseStmtList(){
 }
 
 unique_ptr<ASTNode> Parser::parseBinaryOp(){
+
     if(!tokenStream.match(IDENTIFIER)){
         // throw error
+        Token t = tokenStream.peek(); 
+        NewError(UNEXP_TOK,t.lexeme,"identifier",t.line,t.column);
     }
     Token identifer = tokenStream.next();
     unique_ptr<ASTNode> left = make_unique<Literal>(identifer.type,identifer.lexeme);
@@ -39,7 +43,8 @@ unique_ptr<ASTNode> Parser::parseStmt(){
                 return parseFncDecl();
         }else{
             if(tokenStream.peek().line==tokenStream.peekAhead(2).line){
-                //throw error
+                Token t = tokenStream.peekNext(); 
+                NewError(UNEXP_TOK,t.lexeme,"identifier",t.line,t.column);
             }
             return parseVarDecl();
         }
@@ -52,12 +57,14 @@ unique_ptr<ASTNode> Parser::parseStmt(){
             return parseBinaryOp();
         }
         //throw error
+        NewError(UNEXP_TOK,next.lexeme,"=",next.line,next.column);
     }else if(current.lexeme=="const"){
         return parseConstDecl();
     }else if(current.lexeme=="if"){
         return parseCndStmt();
     }
     //throw error
+    // NewError(UNEXP_TOK,current.lexeme,"",current.line,current.column);
     return nullptr;
 }
 
@@ -67,11 +74,16 @@ unique_ptr<ASTNode> Parser::parseVarDecl(){
     string type = tokenStream.next().lexeme;
     if(!tokenStream.match(IDENTIFIER)){
         //throw error
+        Token t = tokenStream.peek(); 
+        NewError(UNEXP_TOK,t.lexeme,"identifier",t.line,t.column);
     }
+    int line = tokenStream.peek().line;
     string identifier = tokenStream.next().lexeme;
-    if(!tokenStream.match(EQUALS)&&tokenStream.peek().line==tokenStream.peekNext().line){
+    if(!tokenStream.match(EQUALS)&&tokenStream.peek().line==line){
         //throw error
-    }else{
+        Token t = tokenStream.peek();
+        NewError(UNEXP_TOK,t.lexeme,"=",t.line,t.column);
+    }else if(tokenStream.match(EQUALS)){
         tokenStream.consume();
         unique_ptr<ASTNode> expr = parseExpr();
         return make_unique<VariableDeclNode>(type,identifier,std::move(expr));
@@ -108,6 +120,8 @@ unique_ptr<ASTNode> Parser::parseFncDecl(){
     int paramFlag = 0;
     if(!tokenStream.match(IDENTIFIER)){
         // throw err
+        Token t = tokenStream.peek(); 
+        NewError(UNEXP_TOK,t.lexeme,"identifier",t.line,t.column);
     }
     string identifier = tokenStream.next().lexeme;
     tokenStream.consume();
@@ -146,6 +160,8 @@ unique_ptr<ASTNode> Parser::parseIfStmt(){
     tokenStream.consume();
     if(tokenStream.peek().lexeme!="("){
         // throw error
+        Token t = tokenStream.peek(); 
+        NewError(MISS_TOK,t.lexeme,"(",t.line,t.column);
     }
     tokenStream.consume();
     unique_ptr<ASTNode> cndList = parseCndExpr();
@@ -157,6 +173,8 @@ unique_ptr<ASTNode> Parser::parseIfStmt(){
 unique_ptr<ASTNode> Parser::parseElsIfStmt(){
     if(tokenStream.peek().lexeme!="("){
         // throw error
+        Token t = tokenStream.peek(); 
+        NewError(MISS_TOK,t.lexeme,"(",t.line,t.column);
     }
     tokenStream.consume();
     unique_ptr<ASTNode> cndList = parseCndExpr();
@@ -264,6 +282,8 @@ unique_ptr<ASTNode> Parser::parseCndExpr(){
     string op;
     if(!tokenStream.match(IDENTIFIER)&&tokenStream.peek().lexeme!="not"){
         //throw error
+        Token t = tokenStream.peek(); 
+        NewError(UNEXP_TOK,t.lexeme,"identifier",t.line,t.column);
     }
     // if(tokenStream.peek().lexeme=="not"){
     //     exprOp.push(tokenStream.next().lexeme);
@@ -275,11 +295,15 @@ unique_ptr<ASTNode> Parser::parseCndExpr(){
         if(tokenStream.peekNext().line!=currentLine&&tokenStream.peek().lexeme==")"){
             tokenStream.consume();
             break;
-        }else{
+        }else if(tokenStream.peekNext().line!=currentLine&&tokenStream.peek().lexeme!=")"){
             // throw error
+            Token t = tokenStream.peek(); 
+            NewError(MISS_TOK,t.lexeme,")",t.line,t.column);
         }
         if(!tokenStream.match(OPERATOR)){
             // throw error
+            Token t = tokenStream.peek(); 
+            NewError(UNEXP_TOK,t.lexeme,"operator",t.line,t.column);
         }
         op = tokenStream.next().lexeme;
         // if(tokenStream.peek().lexeme=="not"){
@@ -287,6 +311,8 @@ unique_ptr<ASTNode> Parser::parseCndExpr(){
         // }
         if(!tokenStream.match(IDENTIFIER)){
             // throw error
+            Token t = tokenStream.peek(); 
+            NewError(UNEXP_TOK,t.lexeme,"identifier",t.line,t.column);
         }
         literal = tokenStream.next();
         node = make_unique<Literal>(literal.type,literal.lexeme);

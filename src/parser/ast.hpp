@@ -303,9 +303,10 @@ class Literal : public ASTNode{
         //      return value;
         // }
         void print() const override {
-            std::cout << "Literal {\n";
-            std::cout << "value: \"" << value << "\"\n";
-            std::cout << "}\n";
+            cout << "Literal {\n";
+            // cout << "Type: \""<< type <<"\"\n";
+            cout << "value: \"" << value << "\"\n";
+            cout << "}\n";
         }
     private:
         TokenType type;
