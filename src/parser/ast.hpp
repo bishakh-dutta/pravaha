@@ -42,6 +42,8 @@ class ExprNode : public ASTNode{
     public:
         ExprNode(const string type,unique_ptr<ASTNode> left,unique_ptr<ASTNode> right)
         :type(type),left(std::move(left)),right(std::move(right)){};
+        ExprNode(const string type,unique_ptr<ASTNode> left)
+        :type(type),left(std::move(left)){};
         // string getType(){
         //     return type;
         // };
@@ -163,6 +165,21 @@ class IfStmtNode : public ASTNode{
     public:
         IfStmtNode(unique_ptr<ASTNode> expr,vector<unique_ptr<ASTNode>> ifblock)
         :expr(std::move(expr)),ifblock(std::move(ifblock)){};
+
+        void print() const override{
+            cout << "IfStmtNode {\n";
+            cout<<"CndList: {\n";
+            expr->print();
+            cout<<"}\n";
+            cout << "IfBody: {";
+            if(ifblock.size()!=0){
+                for(const auto& stmt : ifblock){
+                    stmt->print();
+                }
+            }
+            cout<<"}\n";
+            cout << "}\n";
+        };
     private:
         unique_ptr<ASTNode> expr;
         vector<unique_ptr<ASTNode>> ifblock;
@@ -172,15 +189,42 @@ class ElsIfStmtNode : public ASTNode{
     public:
         ElsIfStmtNode(unique_ptr<ASTNode> expr,vector<unique_ptr<ASTNode>> elsifblock)
         :expr(std::move(expr)),elsifblock(std::move(elsifblock)){};
+
+        void print() const override{
+            cout << "ElsIfStmtNode {\n";
+            cout<<"CndList: {\n";
+            expr->print();
+            cout<<"}\n";
+            cout << "ElsIfBody: {";
+            if(elsifblock.size()!=0){
+                for(const auto& stmt : elsifblock){
+                    stmt->print();
+                }
+            }
+            cout<<"}\n";
+            cout << "}\n";
+        };
     private:
         unique_ptr<ASTNode> expr;
         vector<unique_ptr<ASTNode>> elsifblock;
 };
 
-class elseStmtNode : public ASTNode{
+class ElseStmtNode : public ASTNode{
     public:
-        elseStmtNode(vector<unique_ptr<ASTNode>> elseblock)
+        ElseStmtNode(vector<unique_ptr<ASTNode>> elseblock)
         :elseblock(std::move(elseblock)){};
+
+        void print() const override{
+            cout << "ElsStmtNode {\n";
+            cout << "ElsBody: {";
+            if(elseblock.size()!=0){
+                for(const auto& stmt : elseblock){
+                    stmt->print();
+                }
+            }
+            cout<<"}\n";
+            cout << "}\n";
+        };
     private:
         vector<unique_ptr<ASTNode>> elseblock;
 };
@@ -189,18 +233,36 @@ class ConditionNode : public ASTNode{
     public:
         ConditionNode(unique_ptr<ASTNode> ifBlock,vector<unique_ptr<ASTNode>> elsIfBlockList,unique_ptr<ASTNode> elseBlock)
         :ifBlock(std::move(ifBlock)),elsIfBlockList(std::move(elsIfBlockList)),elseBlock(std::move(elseBlock)){};
+        ConditionNode(unique_ptr<ASTNode> ifBlock,unique_ptr<ASTNode> elseBlock)
+        :ifBlock(std::move(ifBlock)),elseBlock(std::move(elseBlock)){};
+        ConditionNode(unique_ptr<ASTNode> ifBlock,vector<unique_ptr<ASTNode>> elsIfBlockList)
+        :ifBlock(std::move(ifBlock)),elsIfBlockList(std::move(elsIfBlockList)){};
+        ConditionNode(unique_ptr<ASTNode> ifBlock)
+        :ifBlock(std::move(ifBlock)){};
+
+        void print() const override{
+            cout << "ConditionNode {\n";
+            ifBlock->print();
+            if(elsIfBlockList.size()!=0){
+                for(const auto& elsIf:elsIfBlockList){
+                    elsIf->print();
+                }
+            }
+            if(elseBlock) elseBlock->print();
+            cout << "}\n";
+        };
     private:
         unique_ptr<ASTNode> ifBlock;
         vector<unique_ptr<ASTNode>> elsIfBlockList;
         unique_ptr<ASTNode> elseBlock;
 };
 
-// class ExprListNode : public ASTNode{
-//     public:
-//         ExprListNode(vector<unique_ptr<ASTNode>> exprList)
-//         :exprList(std::move(exprList)){};
-//         vector<unique_ptr<ASTNode>> exprList;
-// };
+class ExprListNode : public ASTNode{
+    public:
+        ExprListNode(vector<unique_ptr<ASTNode>> exprList)
+        :exprList(std::move(exprList)){};
+        vector<unique_ptr<ASTNode>> exprList;
+};
 
 
 

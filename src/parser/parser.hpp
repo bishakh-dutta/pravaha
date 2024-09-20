@@ -26,9 +26,9 @@ class Parser{
         unique_ptr<ASTNode> parseElsIfStmt();
         unique_ptr<ASTNode> parseElsStmt();
         unique_ptr<ASTNode> parseCndStmt();
+        unique_ptr<ASTNode> parseCndExpr();
         unique_ptr<ASTNode> parseBinaryOp();
         unique_ptr<ASTNode> parseExpr();
-        unique_ptr<ASTNode> parseLiteral();
         vector<unique_ptr<ASTNode>> parseParams();
         vector<unique_ptr<ASTNode>> parseBlock();
         unordered_set<string> dataType = {

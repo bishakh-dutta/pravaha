@@ -1,3 +1,25 @@
+if (a==b)
+    a = 21
+elif (y == z)
+    q = 10
+if (z = 10)
+    b = 10
+else
+    x = 30
+if (a==b)
+    a = 21
+elif (y == z)
+    q = 10
+elif (y1 == z2)
+    q2 = 102
+if (a==b)
+    a = 21
+elif (y == z)
+    q = 10
+elif (y1 == z2)
+    q2 = 102
+else
+    x = 30
 int x = 4 + 2 * 3 - 5
 int y = x + 20
 int z = x + y / 2 - 1
@@ -11,3 +33,7 @@ int fn()
 int z
 int fn(int x,int z)
     int b = 1
+    if (y == z or y noteq z and l >= m)
+    a = 21
+if (a == b and y noteq z)
+    a = 21

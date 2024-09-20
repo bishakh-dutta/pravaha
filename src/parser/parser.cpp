@@ -43,7 +43,7 @@ unique_ptr<ASTNode> Parser::parseStmt(){
             return parseVarDecl();
         }
     }else if(current.type==IDENTIFIER){
-        unordered_set<string> binaryOp = {"=","+=","-=","*=","/=","==","<","<=",">",">=","and","or"};
+        unordered_set<string> binaryOp = {"=","+=","-=","*=","/="};
         Token next = tokenStream.peekNext();
         if(next.lexeme=="("){
             return parseFncCall();
@@ -121,19 +121,54 @@ unique_ptr<ASTNode> Parser::parseFncDecl(){
     return make_unique<FunctionDeclNode>(type,identifier,std::move(fnBlock));
 }
 unique_ptr<ASTNode> Parser::parseFncCall(){
+    
 return nullptr;
 }
 unique_ptr<ASTNode> Parser::parseIfStmt(){
-return nullptr;
+    if(tokenStream.next().lexeme!="("){
+        // throw error
+    }
+    tokenStream.consume();
+    unique_ptr<ASTNode> cndList = parseCndExpr();
+    vector<unique_ptr<ASTNode>> ifBlock = parseBlock();
+    return make_unique<IfStmtNode>(std::move(cndList),std::move(ifBlock));
 }
 unique_ptr<ASTNode> Parser::parseElsIfStmt(){
-return nullptr;
+    if(tokenStream.peek().lexeme!="("){
+        // throw error
+    }
+    tokenStream.consume();
+    unique_ptr<ASTNode> cndList = parseCndExpr();
+    vector<unique_ptr<ASTNode>> elsIfBlock = parseBlock();
+    return make_unique<ElsIfStmtNode>(std::move(cndList),std::move(elsIfBlock));
 }
 unique_ptr<ASTNode> Parser::parseElsStmt(){
-return nullptr;
+    vector<unique_ptr<ASTNode>> elsBlock = parseBlock();
+    return make_unique<ElseStmtNode>(std::move(elsBlock));
 }
 unique_ptr<ASTNode> Parser::parseCndStmt(){
-return nullptr;
+    bool elsIf = false,els = false;
+    unique_ptr<ASTNode> ifStmt = parseIfStmt();
+    unique_ptr<ASTNode> elsStmt;
+    vector<unique_ptr<ASTNode>> elsIfList;
+    while(tokenStream.peek().lexeme=="elif"){
+        tokenStream.consume();
+        elsIfList.push_back(parseElsIfStmt());
+        elsIf = true;
+    }
+    if(tokenStream.peek().lexeme=="else"){
+        tokenStream.consume();
+        elsStmt = parseElsStmt();
+        els = true;
+    }
+    if(elsIf&&els){
+        return make_unique<ConditionNode>(std::move(ifStmt),std::move(elsIfList),std::move(elsStmt));
+    }else if(elsIf){
+        return make_unique<ConditionNode>(std::move(ifStmt),std::move(elsIfList));
+    }else if(els){
+        return make_unique<ConditionNode>(std::move(ifStmt),std::move(elsStmt));
+    }
+    return make_unique<ConditionNode>(std::move(ifStmt));
 }
 // unique_ptr<ASTNode> Parser::parseExprList(){
 //     vector<unique_ptr<ASTNode>> exprList;
@@ -142,6 +177,27 @@ return nullptr;
 //     }
 //     return make_unique<ExprListNode>(std::move(exprList));
 // }
+bool cndPrecedence(string op1,string op2){
+    if(op1=="or"){
+        if(op2!="or") return true;
+    }else if(op1=="and"){
+        if(op2!="or"&&op2!="and") return true;
+    }else if(op1=="noteq"){
+        if(op2!="and"&&op2!="or") return true;
+    }else if(op1=="=="){
+        if(op2!="noteq"&&op2!="and"&&op2!="or") return true;
+    }else if(op1==">="){
+        if(op2==">"||op2=="<="||op2=="<"||op2=="not") return true;
+    }else if(op1==">"){
+        if(op2=="<="||op2=="<"||op2=="not") return true;
+    }else if(op1=="<="){
+        if(op2=="<"||op2=="not") return true;
+    }else if(op1=="<"){
+        if(op2=="not") return true;
+    }
+    return false;
+}
+
 bool precedence(string op1,string op2){
     char op = op1[0];
     char top = op2[0];
@@ -169,10 +225,77 @@ bool precedence(string op1,string op2){
             return false;
     }
 }
+unique_ptr<ASTNode> Parser::parseCndExpr(){
+    // not isn't implemented yet
+    // will do it later
+    int currentLine = tokenStream.peek().line;
+    string op;
+    if(!tokenStream.match(IDENTIFIER)&&tokenStream.peek().lexeme!="not"){
+        //throw error
+    }
+    // if(tokenStream.peek().lexeme=="not"){
+    //     exprOp.push(tokenStream.next().lexeme);
+    // }
+    Token literal = tokenStream.next();
+    unique_ptr<ASTNode> node = make_unique<Literal>(literal.type,literal.lexeme);
+    exprTree.push(std::move(node));
+    while(tokenStream.peek().line==currentLine){
+        if(tokenStream.peekNext().line!=currentLine&&tokenStream.peek().lexeme==")"){
+            tokenStream.consume();
+            break;
+        }else{
+            // throw error
+        }
+        if(!tokenStream.match(OPERATOR)){
+            // throw error
+        }
+        op = tokenStream.next().lexeme;
+        // if(tokenStream.peek().lexeme=="not"){
+            
+        // }
+        if(!tokenStream.match(IDENTIFIER)){
+            // throw error
+        }
+        literal = tokenStream.next();
+        node = make_unique<Literal>(literal.type,literal.lexeme);
+        if(!exprOp.empty()){
+            auto top = exprOp.top();
+            if(cndPrecedence(op,top)){
+                if(!exprTree.empty()){
+                    auto treeTop1 = std::move(exprTree.top());
+                    exprTree.pop();
+                    auto treeTop2 = std::move(exprTree.top());
+                    exprTree.pop();
+                    auto treeOp = exprOp.top();
+                    exprOp.pop();
+                    unique_ptr<ASTNode> treeNode = make_unique<ExprNode>(treeOp,std::move(treeTop2),std::move(treeTop1));
+                    exprTree.push(std::move(treeNode));
+                    exprTree.push(std::move(node));
+                }
+            }else{
+                exprTree.push(std::move(node));
+            }
+        }else{
+            exprTree.push(std::move(node));
+        }
+        exprOp.push(op);
+    }
+    while (!exprOp.empty()) {
+        auto op = exprOp.top();
+        exprOp.pop();
+        auto treeTop1 = std::move(exprTree.top());
+        exprTree.pop();
+        auto treeTop2 = std::move(exprTree.top());
+        exprTree.pop();
+        unique_ptr<ASTNode> treeNode = make_unique<ExprNode>(op,std::move(treeTop2),std::move(treeTop1));
+        exprTree.push(std::move(treeNode));
+    }
+    return std::move(exprTree.top());
+}
 unique_ptr<ASTNode> Parser::parseExpr(){
     int currentLine = tokenStream.peek().line;
     string op;
-    if(!tokenStream.match(INT)&&!tokenStream.match(FLOAT)){
+    if(!tokenStream.match(INT)&&!tokenStream.match(FLOAT)&&!tokenStream.match(IDENTIFIER)){
         //throw error
     }
     Token literal = tokenStream.next();
@@ -208,7 +331,6 @@ unique_ptr<ASTNode> Parser::parseExpr(){
         }else{
             exprTree.push(std::move(node));
         }
-
         exprOp.push(op);
     }
     while (!exprOp.empty()) {
@@ -222,9 +344,6 @@ unique_ptr<ASTNode> Parser::parseExpr(){
         exprTree.push(std::move(treeNode));
     }
     return std::move(exprTree.top());
-}
-unique_ptr<ASTNode> Parser::parseLiteral(){
-return nullptr;
 }
 vector<unique_ptr<ASTNode>> Parser::parseParams(){
     vector<unique_ptr<ASTNode>> paramList;
