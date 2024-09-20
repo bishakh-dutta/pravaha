@@ -119,6 +119,20 @@ class ParamNode : public ASTNode{
         string type;
         string identifier;
 };
+
+class ArgNode : public ASTNode{
+    public:
+        ArgNode(const string identifier)
+        :identifier(identifier){};
+        void print() const override{
+            cout<<"Arg: {\n";
+            cout<<"identifier: "<<identifier<<"\n";
+            cout<<"}\n";
+        };
+    private:
+        string identifier;
+};
+
 class FunctionDeclNode : public ASTNode{
     public:
         FunctionDeclNode(const string type,const string identifier,vector<unique_ptr<ASTNode>> paramList,vector<unique_ptr<ASTNode>>functionBody)
@@ -156,6 +170,21 @@ class FunctionCallNode : public ASTNode{
     public:
         FunctionCallNode(const string identifier,vector<unique_ptr<ASTNode>> argList)
         :identifier(identifier),argList(std::move(argList)){};
+        FunctionCallNode(const string identifier)
+        :identifier(identifier){};
+
+        void print() const override{
+            cout << "FunctionCallNode {\n";
+            cout << "identifier: \"" << identifier << "\",\n";
+            if(argList.size()!=0){
+                cout<<"ParamList: {\n";
+                for(const auto& arg:argList){
+                    arg->print();
+                }
+                cout<<"}\n";
+            }
+            cout << "}\n";
+        };
     private:
         string identifier;
         vector<unique_ptr<ASTNode>> argList;

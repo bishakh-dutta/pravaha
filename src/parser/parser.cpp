@@ -28,6 +28,7 @@ unique_ptr<ASTNode> Parser::parseBinaryOp(){
     return make_unique<ExprNode>(op,std::move(left),std::move(right));
 }
 
+// main parse statement
 unique_ptr<ASTNode> Parser::parseStmt(){
     Token current = tokenStream.peek();
     if(dataType.find(current.lexeme) != dataType.end()){
@@ -60,6 +61,8 @@ unique_ptr<ASTNode> Parser::parseStmt(){
     return nullptr;
 }
 
+
+// parsing variable declaration
 unique_ptr<ASTNode> Parser::parseVarDecl(){
     string type = tokenStream.next().lexeme;
     if(!tokenStream.match(IDENTIFIER)){
@@ -78,6 +81,8 @@ unique_ptr<ASTNode> Parser::parseVarDecl(){
 unique_ptr<ASTNode> Parser::parseConstDecl(){
 return nullptr;
 }
+
+// parse any block with this
 vector<unique_ptr<ASTNode>> Parser::parseBlock(){
     vector<unique_ptr<ASTNode>> block;
     int level = 0;
@@ -95,6 +100,8 @@ vector<unique_ptr<ASTNode>> Parser::parseBlock(){
     }
     return block;
 }
+
+// parse function declaration
 unique_ptr<ASTNode> Parser::parseFncDecl(){
 
     string type = tokenStream.next().lexeme;
@@ -120,12 +127,24 @@ unique_ptr<ASTNode> Parser::parseFncDecl(){
     if(paramFlag==1) return make_unique<FunctionDeclNode>(type,identifier,std::move(paramList),std::move(fnBlock));
     return make_unique<FunctionDeclNode>(type,identifier,std::move(fnBlock));
 }
+
 unique_ptr<ASTNode> Parser::parseFncCall(){
-    
-return nullptr;
+    vector<unique_ptr<ASTNode>> argList;
+    string identifier = tokenStream.next().lexeme;
+    tokenStream.consume();
+    if(tokenStream.peek().lexeme!=")"){
+        argList = parseArgList();
+        tokenStream.consume();
+        return make_unique<FunctionCallNode>(identifier,std::move(argList));
+    }
+    tokenStream.consume();
+    return make_unique<FunctionCallNode>(identifier);
 }
+
+// parse if block
 unique_ptr<ASTNode> Parser::parseIfStmt(){
-    if(tokenStream.next().lexeme!="("){
+    tokenStream.consume();
+    if(tokenStream.peek().lexeme!="("){
         // throw error
     }
     tokenStream.consume();
@@ -133,6 +152,8 @@ unique_ptr<ASTNode> Parser::parseIfStmt(){
     vector<unique_ptr<ASTNode>> ifBlock = parseBlock();
     return make_unique<IfStmtNode>(std::move(cndList),std::move(ifBlock));
 }
+
+// parse ElseIF block
 unique_ptr<ASTNode> Parser::parseElsIfStmt(){
     if(tokenStream.peek().lexeme!="("){
         // throw error
@@ -142,10 +163,14 @@ unique_ptr<ASTNode> Parser::parseElsIfStmt(){
     vector<unique_ptr<ASTNode>> elsIfBlock = parseBlock();
     return make_unique<ElsIfStmtNode>(std::move(cndList),std::move(elsIfBlock));
 }
+
+// parse Else block
 unique_ptr<ASTNode> Parser::parseElsStmt(){
     vector<unique_ptr<ASTNode>> elsBlock = parseBlock();
     return make_unique<ElseStmtNode>(std::move(elsBlock));
 }
+
+// Wrapper for conditional statement
 unique_ptr<ASTNode> Parser::parseCndStmt(){
     bool elsIf = false,els = false;
     unique_ptr<ASTNode> ifStmt = parseIfStmt();
@@ -177,6 +202,9 @@ unique_ptr<ASTNode> Parser::parseCndStmt(){
 //     }
 //     return make_unique<ExprListNode>(std::move(exprList));
 // }
+
+
+// check precedence for condtional operators
 bool cndPrecedence(string op1,string op2){
     if(op1=="or"){
         if(op2!="or") return true;
@@ -198,6 +226,8 @@ bool cndPrecedence(string op1,string op2){
     return false;
 }
 
+
+// check precedence for expression operator
 bool precedence(string op1,string op2){
     char op = op1[0];
     char top = op2[0];
@@ -225,6 +255,8 @@ bool precedence(string op1,string op2){
             return false;
     }
 }
+
+// parsing condition block
 unique_ptr<ASTNode> Parser::parseCndExpr(){
     // not isn't implemented yet
     // will do it later
@@ -292,6 +324,9 @@ unique_ptr<ASTNode> Parser::parseCndExpr(){
     }
     return std::move(exprTree.top());
 }
+
+
+// parsing variable assignments
 unique_ptr<ASTNode> Parser::parseExpr(){
     int currentLine = tokenStream.peek().line;
     string op;
@@ -345,6 +380,8 @@ unique_ptr<ASTNode> Parser::parseExpr(){
     }
     return std::move(exprTree.top());
 }
+
+// parsing function parameters
 vector<unique_ptr<ASTNode>> Parser::parseParams(){
     vector<unique_ptr<ASTNode>> paramList;
     while(!tokenStream.isAtEnd()){
@@ -366,4 +403,22 @@ vector<unique_ptr<ASTNode>> Parser::parseParams(){
         }
     }
     return paramList;
+}
+
+vector<unique_ptr<ASTNode>> Parser::parseArgList(){
+    vector<unique_ptr<ASTNode>> argList;
+    while(!tokenStream.isAtEnd()){
+        if(tokenStream.match(IDENTIFIER)){
+            // throw error
+        }
+        string identifier = tokenStream.next().lexeme;
+        if(tokenStream.peek().lexeme==","){
+            tokenStream.consume();
+        }
+        argList.push_back(make_unique<ArgNode>(identifier));
+        if(tokenStream.peek().lexeme==")"){
+            break;
+        }
+    }
+    return argList;
 }
